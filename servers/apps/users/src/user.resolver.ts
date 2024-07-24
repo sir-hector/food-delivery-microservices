@@ -20,8 +20,8 @@ export class UsersResolver {
         @Args('registerInput') registerDto: RegisterDto,
         @Context() context: {res: Response}
     ): Promise<RegisterResponse> {
-        if(!registerDto. name || !registerDto.email || !registerDto.password) {
-            throw new BadRequestException('Please fill all fields')
+        if (!registerDto.name || !registerDto.email || !registerDto.password) {
+          throw new BadRequestException('Please fill all fields');
         }
 
         const {user} = await this.userService.register(registerDto, context.res);

@@ -29,6 +29,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
           },
         },
       }),
+      inject: [ConfigService],
     }),
   ],
   providers: [EmailService],

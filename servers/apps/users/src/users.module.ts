@@ -3,14 +3,18 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriverConfig, ApolloFederationDriver } from '@nestjs/apollo';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../../prisma/Prisma.service';
 import { UsersResolver } from './user.resolver';
 import { EmailModule } from './email/email.module';
+import { EmailService } from './email/email.service';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloFederationDriver,
       autoSchemaFile: {
@@ -20,6 +24,13 @@ import { EmailModule } from './email/email.module';
     EmailModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService, ConfigService, JwtService, PrismaService, UsersResolver],
+  providers: [
+    UsersService,
+    ConfigService,
+    JwtService,
+    PrismaService,
+    UsersResolver,
+    EmailService,
+  ],
 })
 export class UsersModule {}
