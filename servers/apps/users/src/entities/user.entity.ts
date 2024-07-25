@@ -30,15 +30,15 @@ export class User {
   @Field()
   password: string;
 
-  @Field(() => Avatars, {nullable: true})
+  @Field(() => Avatars, { nullable: true })
   avatar?: Avatars | null;
 
   @Field()
   role: string;
 
   @Field()
-  createdAt: string;
+  createdAt: Date;
 
   @Field()
-  updatedAt: string;
+  updatedAt: Date;
 }

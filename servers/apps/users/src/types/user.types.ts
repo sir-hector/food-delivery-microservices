@@ -3,11 +3,11 @@ import {User} from '../entities/user.entity'
 
 @ObjectType()
 export class ErrorType {
-    @Field()
-    messsage: string
+  @Field()
+  message: string;
 
-    @Field({nullable: true})
-    code?: string;
+  @Field({ nullable: true })
+  code?: string;
 }
 
 @ObjectType()
@@ -30,9 +30,15 @@ export class ActivationResponse {
 
 @ObjectType()
 export class LoginRespone {
-    @Field(() => User)
-    user: User
-    
-    @Field(() => ErrorType, {nullable: true})
-    error?: ErrorType
+  @Field(() => User)
+  user: User;
+
+  @Field()
+  accessToken: string;
+
+  @Field()
+  refreshToken: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
 }

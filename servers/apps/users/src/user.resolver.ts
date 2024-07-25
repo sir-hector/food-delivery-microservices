@@ -1,7 +1,11 @@
 import { BadRequestException, UseFilters } from "@nestjs/common";
 import { Args, Context, Mutation, Resolver, Query } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
-import { ActivationResponse, RegisterResponse } from './types/user.types';
+import {
+  ActivationResponse,
+  LoginRespone,
+  RegisterResponse,
+} from './types/user.types';
 import { ActivationDto, RegisterDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 import { Response } from 'express';
@@ -34,6 +38,14 @@ export class UsersResolver {
     @Context() context: { res: Response },
   ): Promise<ActivationResponse> {
     return await this.userService.activateUser(activationDto, context.res);
+  }
+
+  @Mutation(() => LoginRespone)
+  async login(
+    @Args('email') email: string,
+    @Args('password') password: string,
+  ): Promise<LoginRespone> {
+    return await this.userService.Login({ email, password });
   }
 
   @Query(() => [User])
