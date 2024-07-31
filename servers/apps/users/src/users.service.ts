@@ -127,7 +127,7 @@ export class UsersService {
     return { user, response };
   }
 
-  // login service
+  // login
   async Login(loginDto: LoginDto) {
     const { email, password } = loginDto;
     const user = await this.prisma.user.findUnique({
@@ -143,6 +143,7 @@ export class UsersService {
       return {
         user: null,
         accessToken: null,
+
         refreshToken: null,
         error: {
           message: 'invalid email or pasword',
@@ -157,6 +158,24 @@ export class UsersService {
     hashedPassword: string,
   ): Promise<boolean> {
     return await bcrypt.compare(password, hashedPassword);
+  }
+
+  // get logged in user
+
+  async getLoggedInUser(req: any) {
+    const user = req.user;
+    const refreshToken = req.refreshtoken;
+    const accessToken = req.accesstoken;
+    return { user, refreshToken, accessToken };
+  }
+
+  // log out user
+
+  async logout(req: any) {
+    req.user = null;
+    req.refreshtoken = null;
+    req.accesstoken = null;
+    return { message: 'User logout successfully' };
   }
 
   // get all users
