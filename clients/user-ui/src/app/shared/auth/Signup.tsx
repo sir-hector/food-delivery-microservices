@@ -11,32 +11,54 @@ import {
 import { useState } from "react";
 
 const formSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters long!"),
   email: z.string().email(),
   password: z.string().min(8, "Password must be at least 8 characters long!"),
+  phone_number: z
+    .number()
+    .min(9, "Phone number must be at least 9 characters "),
 });
 
-type LoginSchema = z.infer<typeof formSchema>;
+type SignUpSchema = z.infer<typeof formSchema>;
 
-const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
+const SignUp = ({
+  setActiveState,
+}: {
+  setActiveState: (e: string) => void;
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<LoginSchema>({
+  } = useForm<SignUpSchema>({
     resolver: zodResolver(formSchema),
   });
 
   const [show, setShow] = useState(false);
 
-  const onSubmit = (data: LoginSchema) => {
+  const onSubmit = (data: SignUpSchema) => {
     console.log(data);
     reset();
   };
   return (
     <div>
-      <h1 className={`${styles.title}`}>Login</h1>
+      <h1 className={`${styles.title}`}>Sign up</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="w-full relative-mb-3">
+          <label htmlFor="" className={`${styles.label}`}>
+            Enter your name
+          </label>
+          <input
+            {...register("name")}
+            type="text"
+            placeholder="name"
+            className={`${styles.input}`}
+          />
+          {errors.name && (
+            <span className="text-red-500 block mt-1">{`${errors.name.message}`}</span>
+          )}
+        </div>
         <label htmlFor="" className={`${styles.label}`}>
           Enter your Email
         </label>
@@ -48,6 +70,18 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
         />
         {errors.email && (
           <span className="text-red-500 block mt-1">{`${errors.email.message}`}</span>
+        )}
+        <label htmlFor="" className={`${styles.label}`}>
+          Enter your phone number
+        </label>
+        <input
+          {...register("phone_number")}
+          type="text"
+          placeholder="791773420"
+          className={`${styles.input}`}
+        />
+        {errors.name && (
+          <span className="text-red-500 block mt-1">{`${errors.name.message}`}</span>
         )}
         <div className="w-full mt-5 relative mb-1">
           <label htmlFor="passsword" className={`${styles.label}`}>
@@ -76,15 +110,10 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
             />
           )}
         </div>
-        <span
-          className={`${styles.label} text-[#2190ff] block text-right cursor-pointer`}
-        >
-          Forgot your password?
-        </span>
         <div className="w-full mt-5">
           <input
             type="submit"
-            value="Login"
+            value="Sign up"
             disabled={isSubmitting}
             className={`${styles.button}`}
           />
@@ -98,12 +127,12 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
           <AiFillGithub size={30} className="cursor-pointer mr-2" />
         </div>
         <h5 className="text-center pt-4 font-Poppins text-[14px] ">
-          Not have any account?{" "}
+          Already have an account?{" "}
           <span
             className="text-[#2190ff] pl-1 cursor-pointer"
-            onClick={() => setActiveState("Signup")}
+            onClick={() => setActiveState("Login")}
           >
-            Sign up
+            Login in
           </span>
         </h5>
         <br />
@@ -112,4 +141,4 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
   );
 };
 
-export default Login;
+export default SignUp;
