@@ -22,8 +22,8 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'Email is required' })
   phone_number: number;
 
-  @Field()
-  address: string;
+  // @Field()
+  // address?: string;
 }
 
 @InputType()

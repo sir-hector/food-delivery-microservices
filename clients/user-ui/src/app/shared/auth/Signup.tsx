@@ -9,6 +9,9 @@ import {
   AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { REGISTER_USER } from "../../graphql/actions/register.action";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters long!"),
@@ -26,6 +29,9 @@ const SignUp = ({
 }: {
   setActiveState: (e: string) => void;
 }) => {
+  const [registerUserMutation, { loading, error, data }] =
+    useMutation(REGISTER_USER);
+
   const {
     register,
     handleSubmit,
@@ -37,9 +43,22 @@ const SignUp = ({
 
   const [show, setShow] = useState(false);
 
-  const onSubmit = (data: SignUpSchema) => {
-    console.log(data);
-    reset();
+  const onSubmit = async (data: SignUpSchema) => {
+    console.error("onSubmit");
+    try {
+      const resposne = await registerUserMutation({
+        variables: data,
+      });
+      console.log(resposne.data.register.activation_token);
+      localStorage.setItem(
+        "acitivation_token",
+        resposne.data.register.activation_token
+      );
+      toast.success("Please check your email to activate your account!");
+      reset();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
   return (
     <div>
@@ -75,13 +94,13 @@ const SignUp = ({
           Enter your phone number
         </label>
         <input
-          {...register("phone_number")}
-          type="text"
+          {...register("phone_number", { valueAsNumber: true })}
+          type="number"
           placeholder="791773420"
           className={`${styles.input}`}
         />
-        {errors.name && (
-          <span className="text-red-500 block mt-1">{`${errors.name.message}`}</span>
+        {errors.phone_number && (
+          <span className="text-red-500 block mt-1">{`${errors.phone_number.message}`}</span>
         )}
         <div className="w-full mt-5 relative mb-1">
           <label htmlFor="passsword" className={`${styles.label}`}>
@@ -93,9 +112,6 @@ const SignUp = ({
             placeholder="password!@#"
             className={`${styles.input}`}
           />
-          {errors.password && (
-            <span className="text-red-500 block mt-1">{`${errors.password.message}`}</span>
-          )}
           {!show ? (
             <AiOutlineEyeInvisible
               className="absolute bottom-3 right-2 z-1 cursor-pointer"
@@ -110,11 +126,14 @@ const SignUp = ({
             />
           )}
         </div>
+        {errors.password && (
+          <span className="text-red-500 block mt-1">{`${errors.password.message}`}</span>
+        )}
         <div className="w-full mt-5">
           <input
             type="submit"
             value="Sign up"
-            disabled={isSubmitting}
+            disabled={isSubmitting || loading}
             className={`${styles.button}`}
           />
         </div>
