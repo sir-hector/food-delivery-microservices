@@ -48,7 +48,7 @@ const ProfileDropDown = () => {
           ></CgProfile>
         </div>
       )}
-      {open && <AuthScreen />}
+      {open && <AuthScreen setOpen={setOpen} />}
     </div>
   );
 };
