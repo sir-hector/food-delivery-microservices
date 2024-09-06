@@ -33,10 +33,10 @@ export class LoginRespone {
   @Field(() => User, { nullable: true })
   user?: User | any;
 
-  @Field()
+  @Field({ nullable: true })
   accessToken?: string;
 
-  @Field()
+  @Field({ nullable: true })
   refreshToken?: string;
 
   @Field(() => ErrorType, { nullable: true })
