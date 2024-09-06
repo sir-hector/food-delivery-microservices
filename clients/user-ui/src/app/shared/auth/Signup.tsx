@@ -51,11 +51,12 @@ const SignUp = ({
       });
       console.log(resposne.data.register.activation_token);
       localStorage.setItem(
-        "acitivation_token",
+        "activation_token",
         resposne.data.register.activation_token
       );
       toast.success("Please check your email to activate your account!");
       reset();
+      setActiveState("Verification");
     } catch (error: any) {
       toast.error(error.message);
     }
