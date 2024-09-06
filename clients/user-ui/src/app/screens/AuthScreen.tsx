@@ -17,7 +17,9 @@ const AuthScreen = ({ setOpen }: { setOpen: (e: boolean) => void }) => {
       onClick={handleClose}
     >
       <div className="w-[450px] bg-slate-900 rounded shadow-sm p-3">
-        {activeState === "Login" && <Login setActiveState={setActiveState} />}
+        {activeState === "Login" && (
+          <Login setActiveState={setActiveState} setOpen={setOpen} />
+        )}
         {activeState === "Signup" && <SignUp setActiveState={setActiveState} />}
         {activeState === "Verification" && (
           <Verification setActiveState={setActiveState} />

@@ -12,6 +12,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../graphql/actions/login.action";
+import Cookies from "js-cookie";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -20,7 +21,13 @@ const formSchema = z.object({
 
 type LoginSchema = z.infer<typeof formSchema>;
 
-const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
+const Login = ({
+  setActiveState,
+  setOpen,
+}: {
+  setActiveState: (e: string) => void;
+  setOpen: (e: boolean) => void;
+}) => {
   const [Login, { loading }] = useMutation(LOGIN_USER);
   const {
     register,
@@ -38,11 +45,13 @@ const Login = ({ setActiveState }: { setActiveState: (e: string) => void }) => {
       email: data.email,
       password: data.password,
     };
-    console.log(loginData);
     try {
       const response = await Login({ variables: loginData });
-      if (response.data.user) {
+      if (response.data.login.user) {
         toast.success("Login successfull");
+        Cookies.set("refresh_token", response.data.login.refreshToken);
+        Cookies.set("access_token", response.data.login.accessToken);
+        setOpen(false);
       } else {
         toast.error(response.data.login.error.message);
       }
