@@ -52,6 +52,8 @@ const Login = ({
         Cookies.set("refresh_token", response.data.login.refreshToken);
         Cookies.set("access_token", response.data.login.accessToken);
         setOpen(false);
+        reset();
+        window.location.reload();
       } else {
         toast.error(response.data.login.error.message);
       }
