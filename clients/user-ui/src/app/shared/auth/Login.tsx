@@ -107,6 +107,7 @@ const Login = ({
         )}
         <span
           className={`${styles.label} text-[#2190ff] block text-right cursor-pointer`}
+          onClick={() => setActiveState("ForgotPassword")}
         >
           Forgot your password?
         </span>
